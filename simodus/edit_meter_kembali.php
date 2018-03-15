@@ -9,23 +9,24 @@ if (empty($_SESSION['admin'])) {
     if (isset($_REQUEST['submit'])) {
 
         //validasi form kosong
-        if ($_REQUEST['no_meter'] == "" || $_REQUEST['lokasi_posko'] == "" || $_REQUEST['nama_cc'] == "" || $_REQUEST['stand'] == "") {
+        if ($_REQUEST['no_dummy'] == "" || $_REQUEST['lokasi_posko'] == "" || $_REQUEST['nama_cc'] == "" || $_REQUEST['stand'] == "") {
             $_SESSION['errEmpty'] = 'ERROR! Semua form wajib diisi';
             echo '<script language="javascript">window.history.back();</script>';
         } else {
 
             $id_meter = $_REQUEST['id_meter'];
-            $no_meter = $_REQUEST['no_meter'];
+            $no_dummy = $_REQUEST['no_dummy'];
             $lokasi_posko = $_REQUEST['lokasi_posko'];
             $nama_cc = $_REQUEST['nama_cc'];
             $stand = $_REQUEST['stand'];
             $tgl_kbl = $_REQUEST['tgl_kbl'];
-            $username = $_SESSION['username'];
+            $nama = $_SESSION['nama'];
             $id_user = $_SESSION['id_user'];
+            $unit = $_SESSION['unit'];
 
             //validasi input data
-            if (!preg_match("/^[0-9]*$/", $no_meter)) {
-                $_SESSION['no_agenda'] = 'Form Nomor Meter harus diisi angka!';
+            if (!preg_match("/^[0-9]*$/", no_dummy)) {
+                $_SESSION['no_dummy'] = 'Form Nomor Dummy harus diisi angka!';
                 echo '<script language="javascript">window.history.back();</script>';
             } else {
 
@@ -45,8 +46,8 @@ if (empty($_SESSION['admin'])) {
                         } else {
 
                             //jika form file tidak kosong akan mengeksekusi script dibawah ini
-                            $query = mysqli_query($config, "UPDATE tbl_metdum_kbl SET no_meter='$no_meter', lokasi_posko='$lokasi_posko', nama_cc='$nama_cc',"
-                                    . "stand='$stand' WHERE no_meter='$no_meter'");
+                            $query = mysqli_query($config, "UPDATE tbl_metdum_kbl SET no_dummy='$no_dummy', lokasi_posko='$lokasi_posko', nama_cc='$nama_cc',"
+                                    . "stand='$stand' WHERE id_meter='$id_meter'");
 
                             if ($query == true) {
                                 $_SESSION['succAdd'] = 'SUKSES! Data berhasil diperbarui';
@@ -65,8 +66,8 @@ if (empty($_SESSION['admin'])) {
 
         $id_meter = $_REQUEST['id_meter'];
         
-        $query = mysqli_query($config, "SELECT no_meter, lokasi_posko, nama_cc, stand, tgl_kbl, username, id_user FROM tbl_metdum_kbl WHERE id_meter='$id_meter'");
-        list($no_meter, $lokasi_posko, $nama_cc, $stand, $tgl_kbl, $username, $id_user) = mysqli_fetch_array($query);
+        $query = mysqli_query($config, "SELECT no_dummy, lokasi_posko, nama_cc, stand, tgl_kbl, nama, id_user FROM tbl_metdum_kbl WHERE id_meter='$id_meter'");
+        list($no_dummy, $lokasi_posko, $nama_cc, $stand, $tgl_kbl, $nama, $id_user) = mysqli_fetch_array($query);
         ?>
 
         <!-- Row Start -->
@@ -123,17 +124,17 @@ if (empty($_SESSION['admin'])) {
                 <!-- Row in form START -->
                 <div class="row">
                     <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Isi dengan angka">
-                        <input type="hidden" name="no_meter" value="<?php echo $no_meter; ?>">
+                        <input type="hidden" name="id_meter" value="<?php echo $id_meter; ?>">
                         <i class="material-icons prefix md-prefix">looks_one</i>
-                        <input id="no_meter" type="number" class="validate" value="<?php echo $no_meter; ?>" name="no_meter" required>
+                        <input id="no_dummy" type="number" class="validate" value="<?php echo $no_dummy; ?>" name="no_dummy" required>
                         <?php
-                        if (isset($_SESSION['no_meter'])) {
-                            $no_meter = $_SESSION['no_meter'];
-                            echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">' . $no_meter . '</div>';
-                            unset($_SESSION['no_meter']);
+                        if (isset($_SESSION['no_dummy'])) {
+                            $no_dummy = $_SESSION['no_dummy'];
+                            echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">' . $no_dummy . '</div>';
+                            unset($_SESSION['no_dummy']);
                         }
                         ?>
-                        <label for="no_meter">Nomor Meter</label>
+                        <label for="no_dummy">No. Dummy</label>
                     </div>
                     <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Isi dengan angka">
                         <input type="hidden" name="stand" value="<?php echo $stand; ?>">

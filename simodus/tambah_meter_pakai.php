@@ -8,22 +8,25 @@ if (empty($_SESSION['admin'])) {
 
     if (isset($_REQUEST['submit'])) {
         $id_meter = $_REQUEST['id_meter'];
-        $no_meter = $_REQUEST['no_meter'];
+        $no_dummy = $_REQUEST['no_dummy'];
         $no_meter_rusak = $_REQUEST['no_meter_rusak'];
         $alasan_rusak = $_REQUEST['alasan_rusak'];
-        $tgl_pakai = date("Y-m-d h:i:s");
+        $tgl_pakai = date("Y-m-d H:i:s");
         $ptgs_pasang = $_REQUEST['ptgs_pasang'];
         $sisa_pulsa = $_REQUEST['sisa_pulsa'];
         $no_hp_plg = $_REQUEST['no_hp_plg'];
         $std_dummy = $_REQUEST['std_dummy'];
-        $username = $_SESSION['username'];
+        $aktivasi = "non aktif";
+        $kembali = "belum";
+        $nama = $_SESSION['nama'];
         $id_user = $_SESSION['id_user'];
+        $unit = $_SESSION['unit'];
 
 
 
         //validasi input data
-        if (!preg_match("/^[0-9]*$/", $no_meter)) {
-            $_SESSION['no_meter'] = 'Form Nomor Meter harus diisi angka!';
+        if (!preg_match("/^[0-9]*$/", $no_dummy)) {
+            $_SESSION['no_dummy'] = 'Form Nomor Meter harus diisi angka!';
             echo '<script language="javascript">window.history.back();</script>';
         } else {
 
@@ -56,14 +59,16 @@ if (empty($_SESSION['admin'])) {
                                     $_SESSION['std_dummy'] = 'Form Stand Dummy harus diisi angka!';
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
+                                    
+                                    $merk_meter_rusak = substr($no_meter_rusak, 0, 2);
 
                                     //jika form file tidak kosong akan mengeksekusi script dibawah ini
-                                    $query = mysqli_query($config, "INSERT INTO tbl_metdum_pakai(id_meter,no_meter,no_meter_rusak,alasan_rusak,tgl_pakai,ptgs_pasang,sisa_pulsa,
-                                            no_hp_plg,std_dummy,username,id_user)
-                                                   VALUES('','$no_meter','$no_meter_rusak','$alasan_rusak','$tgl_pakai','$ptgs_pasang',"
-                                            . "'$sisa_pulsa','$no_hp_plg','$std_dummy','$username','$id_user')");
+                                    $query = mysqli_query($config, "INSERT INTO tbl_metdum_pakai(id_meter,no_dummy,no_meter_rusak,merk_meter_rusak,alasan_rusak,tgl_pakai,ptgs_pasang,sisa_pulsa,
+                                            no_hp_plg,std_dummy,aktivasi,kembali,nama,id_user,unit)
+                                                   VALUES('','$no_dummy','$no_meter_rusak','$merk_meter_rusak','$alasan_rusak','$tgl_pakai','$ptgs_pasang',"
+                                            . "'$sisa_pulsa','$no_hp_plg','$std_dummy','$aktivasi','$kembali','$nama','$id_user','$unit')");
 
-                                    $query_status = mysqli_query($config, "UPDATE tbl_metdum_stok SET status='' WHERE no_meter='$no_meter'");
+                                    $query_status = mysqli_query($config, "UPDATE tbl_metdum_stok SET status='', tgl_pakai='$tgl_pakai', no_meter_rusak='$no_meter_rusak' WHERE no_dummy='$no_dummy'");
 
                                     if ($query == true) {
                                         $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -132,7 +137,7 @@ if (empty($_SESSION['admin'])) {
         <div class="row jarak-form">
 
             <?php
-            $query_stok = mysqli_query($config, "SELECT * FROM tbl_metdum_stok WHERE status='ready' ORDER BY tgl_input DESC LIMIT 3");
+            $query_stok = mysqli_query($config, "SELECT * FROM tbl_metdum_stok WHERE status='ready' ORDER BY no_dummy");
             ?>
 
             <!-- Form START -->
@@ -140,28 +145,63 @@ if (empty($_SESSION['admin'])) {
 
                 <!-- Row in form START -->
                 <div class="row">
-                    <div class="input-field col s6 " data-position="top" data-tooltip="Pilih No. Dummy">
-                        <i class="material-icons md-prefix">looks_one</i>
-                        <select id="no_meter" type="number" class="validate" name="no_meter" required>
-                            <option value="" disabled selected>Pilih No. Dummy</option>
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix md-prefix">looks_one</i><label>Pilih No. Dummy</label><br/>
+                        <div class="input-field col s11 right">
+                        <select id="no_dummy" type="number" class="browser-default validate" name="no_dummy" required>
+                            <option value="" disabled selected> -----</option>
                             <?php if (mysqli_num_rows($query_stok) > 0) {
                                 while ($row = mysqli_fetch_array($query_stok)) {
                                     ?>
-                                    <option value="<?php echo $row['no_meter'] ?>"><?php echo $row['no_meter'] ?></option> <?php
+                                    <option value="<?php echo $row['no_dummy'] ?>"><?php echo $row['no_dummy'] ?></option> <?php
                                 }
                             }
                             ?>
                         </select>
+                        </div>
                         <?php
-                        if (isset($_SESSION['no_meter'])) {
-                            $no_meter = $_SESSION['no_meter'];
-                            echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">' . $no_meter . '</div>';
-                            unset($_SESSION['no_meter']);
+                        if (isset($_SESSION['no_dummy'])) {
+                            $no_meter = $_SESSION['no_dummy'];
+                            echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">' . $no_dummy . '</div>';
+                            unset($_SESSION['no_dummy']);
                         }
                         ?>
-                        <label for="no_meter"></label>
                     </div>
-
+                    
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix md-prefix">looks_one</i><label>Alasan Rusak</label><br/>
+                        <div class="input-field col s11 right">
+                        <select id="alasan_rusak" type="number" class="browser-default validate" name="alasan_rusak" required>
+                            <option value="" disabled selected> -----</option>
+                            <option value="1">Token tidak dapat dimasukkan</option>
+                            <option value="2">Sisa kredit pada kWh meter hilang/bertambah saat listrik padam</option>
+                            <option value="3">Kerusakan pada keypad</option>
+                            <option value="4">LCD mati/rusak</option>
+                            <option value="5">kWh Meter rusak (akibat petir/terbakar)</option>
+                            <option value="6">Sisa kredit tidak bertambah saat kredit baru dimasukkan</option>
+                            <option value="7">Baut tutup terminal patah</option>
+                            <option value="8">Tegangan dibawah 180V tidak bisa hidup</option>
+                            <option value="9">Micro switch rusak / tidak keluar tegangan</option>
+                            <option value="10">ID meter pada display dan nameplate tidak sama</option>
+                            <option value="11">Sisa kredit tidak berkurang</option>
+                            <option value="12">Display overload tanpa beban</option>
+                            <option value="13">Terminal kWh meter rusak</option>
+                            <option value="14">Meter periksa/tutup dibuka lampu tetap nyala</option>
+                            <option value="15">Timbul rusak</option>
+                            <option value="16">kWh minus</option>
+                            <option value="17">kWh bertambah</option>
+                            <option value="18">Lain-lain</option>
+                        </select>
+                        </div>
+                        <?php
+                        if (isset($_SESSION['alasan_rusak'])) {
+                            $alasan_rusak = $_SESSION['alasan_rusak'];
+                            echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">' . $alasan_rusak . '</div>';
+                            unset($_SESSION['alasan_rusak']);
+                        }
+                        ?>
+                    </div>
+                    
                     <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Isi dengan angka">
                         <i class="material-icons prefix md-prefix">looks_two</i>
                         <input id="no_meter_rusak" type="number" class="validate" name="no_meter_rusak" required>
@@ -173,18 +213,6 @@ if (empty($_SESSION['admin'])) {
                         }
                         ?>
                         <label for="no_meter_rusak">No. Meter Rusak</label>
-                    </div>
-                    <div class="input-field col s6" data-position="top">
-                        <i class="material-icons prefix md-prefix">report_problem</i>
-                        <input id="alasan_rusak" type="text" class="validate" name="alasan_rusak" required>
-                        <?php
-                        if (isset($_SESSION['alasan_rusak'])) {
-                            $alasan_rusak = $_SESSION['alasan_rusak'];
-                            echo '<div id="alert-message" class="callout bottom z-depth-1 red lighten-4 red-text">' . $alasan_rusak . '</div>';
-                            unset($_SESSION['alasan_rusak']);
-                        }
-                        ?>
-                        <label for="stand">Alasan Rusak</label>
                     </div>
                     <div class="input-field col s6" data-position="top">
                         <i class="material-icons prefix md-prefix">person</i>
@@ -234,7 +262,6 @@ if (empty($_SESSION['admin'])) {
                         ?>
                         <label for="stand">Stand Dummy</label>
                     </div>
-
                 </div>
                 <!-- Row in form END -->
 

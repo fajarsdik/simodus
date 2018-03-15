@@ -35,6 +35,62 @@ if (empty($_SESSION['admin'])) {
                       </script>';
             } else {
 
+                if ($row['merk_meter_rusak'] == 14) {
+                    $merk_meter_rusak = 'Hexing';
+                } else if ($row['merk_meter_rusak'] == 86) {
+                    $merk_meter_rusak = 'Smart Meter';
+                } else if ($row['merk_meter_rusak'] == 45) {
+                    $merk_meter_rusak = 'Sanxing';
+                } else if ($row['merk_meter_rusak'] == 22) {
+                    $merk_meter_rusak = 'Star';
+                } else if ($row['merk_meter_rusak'] == 60) {
+                    $merk_meter_rusak = 'FDE';
+                } else if ($row['merk_meter_rusak'] == 32) {
+                    $merk_meter_rusak = 'Itron';
+                } else if ($row['merk_meter_rusak'] == 34) {
+                    $merk_meter_rusak = 'Glomet';
+                } else if ($row['merk_meter_rusak'] == 01) {
+                    $merk_meter_rusak = 'Hexing (Lama)';
+                }
+
+                if ($row['alasan_rusak'] == 1) {
+                    $alasan_rusak = "Token tidak dapat dimasukkan";
+                } else if ($row['alasan_rusak'] == 2) {
+                    $alasan_rusak = "Sisa kredit pada kWh meter hilang/bertambah saat listrik padam";
+                } else if ($row['alasan_rusak'] == 3) {
+                    $alasan_rusak = "Kerusakan pada keypad";
+                } else if ($row['alasan_rusak'] == 4) {
+                    $alasan_rusak = "LCD mati/rusak";
+                } else if ($row['alasan_rusak'] == 5) {
+                    $alasan_rusak = "kWh Meter rusak (akibat petir/terbakar)";
+                } else if ($row['alasan_rusak'] == 6) {
+                    $alasan_rusak = "Sisa kredit tidak bertambah saat kredit baru dimasukkan";
+                } else if ($row['alasan_rusak'] == 7) {
+                    $alasan_rusak = "Baut tutup terminal patah";
+                } else if ($row['alasan_rusak'] == 8) {
+                    $alasan_rusak = "Tegangan dibawah 180V tidak bisa hidup";
+                } else if ($row['alasan_rusak'] == 9) {
+                    $alasan_rusak = "Micro switch rusak / tidak keluar tegangan";
+                } else if ($row['alasan_rusak'] == 10) {
+                    $alasan_rusak = "ID meter pada display dan nameplate tidak sama";
+                } else if ($row['alasan_rusak'] == 11) {
+                    $alasan_rusak = "Sisa kredit tidak berkurang";
+                } else if ($row['alasan_rusak'] == 12) {
+                    $alasan_rusak = "Display overload tanpa beban";
+                } else if ($row['alasan_rusak'] == 13) {
+                    $alasan_rusak = "Terminal kWh meter rusak";
+                } else if ($row['alasan_rusak'] == 14) {
+                    $alasan_rusak = "Meter periksa/tutup dibuka lampu tetap nyala";
+                } else if ($row['alasan_rusak'] == 15) {
+                    $alasan_rusak = "Timbul rusak";
+                } else if ($row['alasan_rusak'] == 16) {
+                    $alasan_rusak = "kWh minus";
+                } else if ($row['alasan_rusak'] == 17) {
+                    $alasan_rusak = "kWh bertambah";
+                } else if ($row['alasan_rusak'] == 18) {
+                    $alasan_rusak = "Lain-lain";
+                }
+
                 echo '
                 <!-- Row form Start -->
 				<div class="row jarak-card">
@@ -49,18 +105,24 @@ if (empty($_SESSION['admin'])) {
 
 				            <tbody>
 				                <tr>
-				                    <td width="13%">No. Meter</td>
+				                    <td width="13%">No. Dummy</td>
 				                    <td width="1%">:</td>
-				                    <td width="86%">' . $row['no_meter'] . '</td>
+				                    <td width="86%">' . $row['no_dummy'] . '</td>
 				                </tr>
 				                <tr>
 				                    <td width="13%">No. Meter Rusak</td>
 				                    <td width="1%">:</td>
 				                    <td width="86%">' . $row['no_meter_rusak'] . '</td>
 				                </tr>
+                                                <tr>
+				                    <td width="13%">Merk Meter Rusak</td>
+				                    <td width="1%">:</td>
+				                    <td width="86%">' . $merk_meter_rusak . '</td>
+				                </tr>
+                                                <tr>
                                                     <td width="13%">Alasan Rusak</td>
                                                     <td width="1%">:</td>
-                                                    <td width="86%">' . $row['alasan_rusak'] . '</td>
+                                                    <td width="86%">' . $alasan_rusak . '</td>
                                                 </tr>
                                                 <tr>
                                                     <td width="13%">Tanggal Pakai</td>

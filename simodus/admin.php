@@ -40,14 +40,26 @@ if (empty($_SESSION['admin'])) {
                     if (isset($_REQUEST['page'])) {
                         $page = $_REQUEST['page'];
                         switch ($page) {
+                            case 'mon':
+                                include "monitoring.php";
+                                break;
                             case 'mdk':
                                 include "meter_dummy_kembali.php";
                                 break;
                             case 'mdg':
                                 include "meter_dummy_pakai.php";
                                 break;
-                            case 'sett':
-                                include "pengaturan.php";
+                            case 'atv':
+                                include "aktivasi_meter.php";
+                                break;
+                            case 'dft_atv':
+                                include "daftar_aktivasi.php";
+                                break;
+                            case 'usr':
+                                include "user.php";
+                                break;
+                            case 'pro':
+                                include "profil.php";
                                 break;
                         }
                     } else {
@@ -69,9 +81,13 @@ if (empty($_SESSION['admin'])) {
                                             if ($_SESSION['admin'] == 1) {
                                                 echo "<strong>Super Admin</strong>. Anda memiliki akses penuh terhadap sistem.";
                                             } elseif ($_SESSION['admin'] == 2) {
-                                                echo "<strong>Administrator</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
-                                            } else {
-                                                echo "<strong>Petugas Disposisi</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
+                                                echo "<strong>Admin Area</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
+                                            } elseif ($_SESSION['admin'] == 3) {
+                                                echo "<strong>Admin Rayon</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
+                                            } elseif ($_SESSION['admin'] == 4) {
+                                                echo "<strong>Petugas Aktivasi</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
+                                            } elseif ($_SESSION['admin'] == 5) {
+                                                echo "<strong>Petugas Posko</strong>. Berikut adalah statistik data yang tersimpan dalam sistem.";
                                             }
                                             ?></p>
                                     </div>
@@ -80,91 +96,107 @@ if (empty($_SESSION['admin'])) {
                             <!-- Welcome Message END -->
 
                             <?php
-                            //menghitung jumlah stok meter dummy
-                            $count1 = mysqli_query($config, "SELECT * FROM tbl_metdum_JML WHERE unit='18301'");
-                            list($id, $unit, $stok) = mysqli_fetch_array($count1);
+                            $unit = $_SESSION['unit']; 
 
-                            //menghitung jumlah surat masuk
-                            //$count2 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_surat_keluar"));
-                            //menghitung jumlah surat masuk
-                            //$count3 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_disposisi"));
-                            //menghitung jumlah klasifikasi
-                            //$count4 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_klasifikasi"));
-                            //menghitung jumlah pengguna
-                            //$count5 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_user"));
+                            //menghitung jumlah meter dummy
+                            $count1 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_metdum_stok WHERE unit LIKE '$unit%'"));
+
+                            //menghitung jumlah dummy terpasang
+                            $count2 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_metdum_stok WHERE unit LIKE '$unit%' && status=''"));
+
+                            //menghitung jumlah dummy standby
+                            $count3 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_metdum_stok WHERE unit LIKE '$unit%' && status='ready'"));
+
+                            //menghitung jumlah meter belum diaktivasi
+                            $count4 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_metdum_pakai WHERE unit LIKE '$unit%' && aktivasi='non aktif'"));
+
+                            //menghitung jumlah meter belum kembali
+                            $count5 = mysqli_num_rows(mysqli_query($config, "SELECT * FROM tbl_metdum_pakai WHERE unit LIKE '$unit%' && aktivasi='aktif' && kembali='belum'"));
+                                                       
                             ?>
 
                             <!-- Info Statistic START -->
-                            <div class="col s12 m4">
-                                <div class="card cyan">
-                                    <div class="card-content">
-                                        <span class="card-title white-text"><i class="material-icons md-36">storage</i> Jumlah Meter Dummy</span>
-        <?php echo '<h5 class="white-text link"> ' . $stok . ' Meter</h5>'; ?>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="col s12 m4">
                                 <div class="card lime darken-1">
                                     <div class="card-content">
-                                        <span class="card-title white-text"><i class="material-icons md-36">drafts</i> Meter Dummy Terpasang</span>
-        <?php echo '<h5 class="white-text link">0 Meter</h5>'; ?>
+                                        <span class="card-title white-text"><i class="material-icons md-36">drafts</i> Dummy Terpasang</span>
+                                        <?php echo '<h5 class="white-text link">' . $count2 . ' Meter</h5>'; ?>
+                                    </div>
+                                </div>
+                            </div>   
+
+                            <div class="col s12 m4">
+                                <div class="card yellow darken-3">
+                                    <div class="card-content">
+                                        <span class="card-title white-text"><i class="material-icons md-36">description</i> Dummy Standby</span>
+                                        <?php echo '<h5 class="white-text link">' . $count3 . ' Meter</h5>'; ?>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col s12 m4">
-                                <div class="card yellow darken-3">
+                                <div class="card cyan">
                                     <div class="card-content">
-                                        <span class="card-title white-text"><i class="material-icons md-36">description</i> Meter Dummy Kembali</span>
-        <?php echo '<h5 class="white-text link">0 Meter</h5>'; ?>
+                                        <span class="card-title white-text"><i class="material-icons md-36">storage</i> Jml Meter Dummy</span>
+                                        <?php echo '<h5 class="white-text link"> ' . $count1 . ' Meter</h5>'; ?>
                                     </div>
                                 </div>
-                            </div>
+                            </div>                          
 
+                            <?php
+                            
+                            if ($count4 > 0) {
+                        
+                            if ($_SESSION['id_user'] == 1 || $_SESSION['admin'] == 2 || $_SESSION['admin'] == 3 || $_SESSION['admin'] == 4) { ?>
                             <div class="col s12 m4">
-                                <div class="card yellow darken-3">
+                                <a href="?page=atv"><div class="card red accent-2">
                                     <div class="card-content">
-                                        <span class="card-title white-text"><i class="material-icons md-36">description</i> Meter Dummy Standby</span>
-        <?php echo '<h5 class="white-text link">0 Meter</h5>'; ?>
+                                        <span class="card-title white-text"><i class="material-icons md-36">people</i> Meter Belum Aktivasi</span>
+                                        <?php echo '<h5 class="white-text link">' . $count4 . ' Meter</h5>'; ?>
                                     </div>
-                                </div>
+                                </div></a>
                             </div>
-
-        <?php if ($_SESSION['id_user'] == 1 || $_SESSION['admin'] == 2) { ?>
-                                <div class="col s12 m4">
-                                    <div class="card blue accent-2">
-                                        <div class="card-content">
-                                            <span class="card-title white-text"><i class="material-icons md-36">people</i> Jumlah Pengguna</span>
-            <?php echo '<h5 class="white-text link">0 Pengguna</h5>'; ?>
-                                        </div>
+                            <?php } } 
+                            
+                            if ($count5 > 0) {
+                        
+                            if ($_SESSION['id_user'] == 1 || $_SESSION['admin'] == 2 || $_SESSION['admin'] == 3 || $_SESSION['admin'] == 5) { ?>
+                            <div class="col s12 m4">
+                                <a href="?page=mdk&act=add"><div class="card red accent-2">
+                                    <div class="card-content">
+                                        <span class="card-title white-text"><i class="material-icons md-36">people</i> Dummy Belum Kembali</span>
+                                        <?php echo '<h5 class="white-text link">' . $count5 . ' Meter</h5>'; ?>
                                     </div>
-                                </div>
-                                <!-- Info Statistic START -->
-            <?php
-        }
-        ?>
-
-                        </div>
-                        <!-- Row END -->
-        <?php
-    }
-    ?>
-                </div>
-                <!-- container END -->
-
-            </main>
-            <!-- Main END -->
-
-            <!-- Include Footer START -->
-    <?php include('include/footer.php'); ?>
-            <!-- Include Footer END -->
-
-        </body>
-        <!-- Body END -->
-
-    </html>
-
+                                </div></a>
+                            </div>
+                            <?php } } ?>
+                            
+                            
+                            
+                            
+                            
+                            <!-- Info Statistic START -->
+                            <?php
+                            
+                    }
+                        ?>    
+                    </div>
+                    <!-- Row END -->
     <?php
 }
 ?>
+            </div>
+            <!-- container END -->
+
+        </main>
+        <!-- Main END -->
+
+        <!-- Include Footer START -->
+<?php include('include/footer.php'); ?>
+        <!-- Include Footer END -->
+
+    </body>
+    <!-- Body END -->
+
+</html>

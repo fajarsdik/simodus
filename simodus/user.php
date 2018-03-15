@@ -43,7 +43,7 @@
                                             <ul class="left">
                                                 <li class="waves-effect waves-light hide-on-small-only"><a href="?page=sett&sub=usr" class="judul"><i class="material-icons">people</i> Manajemen User</a></li>
                                                 <li class="waves-effect waves-light">
-                                                    <a href="?page=sett&sub=usr&act=add"><i class="material-icons md-24">person_add</i> Tambah User</a>
+                                                    <a href="?page=usr&act=add"><i class="material-icons md-24">person_add</i> Tambah User</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -104,11 +104,12 @@
                             <table class="bordered" id="tbl">
                                 <thead class="blue lighten-4" id="head">
                                     <tr>
-                                        <th width="8%">No</th>
-                                        <th width="23%">Username</th>
-                                        <th width="30%">Nama<br/>NIP</th>
-                                        <th width="22%">Level</th>
-                                        <th width="16%">Tindakan</th>
+                                        <th width="4%" style="text-align: center">No</th>
+                                        <th width="12%" style="text-align: center">Username</th>
+                                        <th width="15%" style="text-align: center">Nama<br/>NIP</th>
+                                        <th width="15%" style="text-align: center">Level</th>
+                                        <th width="25%" style="text-align: center">Unit</th>
+                                        <th width="10%" style="text-align: center">Tindakan</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -117,18 +118,52 @@
                                 if(mysqli_num_rows($query) > 0){
                                     $no = 1;
                                     while($row = mysqli_fetch_array($query)){
-                                    echo '<td>'.$no++.'</td>';
+                                    echo '<td style="text-align: center">'.$no++.'</td>';
 
                                     if($row['admin'] == 1){
                                         $row['admin'] = 'Super Admin';
                                     } elseif($row['admin'] == 2){
-                                        $row['admin'] = 'Administrator';
-                                    } else {
-                                        $row['admin'] = 'User Biasa';
-                                    } echo '<td>'.$row['username'].'</td>
-                                            <td>'.$row['nama'].'<br/>'.$row['nip'].'</td>
-                                            <td>'.$row['admin'].'</td>
-                                            <td>';
+                                        $row['admin'] = 'Admin Area';
+                                    } elseif($row['admin'] == 3){
+                                        $row['admin'] = 'Admin Rayon';
+                                    } elseif($row['admin'] == 4){
+                                        $row['admin'] = 'Petugas Aktivasi';
+                                    } elseif($row['admin'] == 5){
+                                        $row['admin'] = 'Petugas Posko';
+                                    }
+                                    
+                                    if($row['unit'] == 18) {
+                                        $row['unit'] = 'WRKR';
+                                    } elseif ($row['unit'] == 183) {
+                                        $row['unit'] = 'Area Tanjungpinang';
+                                    } elseif ($row['unit'] == 18301) {
+                                        $row['unit'] = 'Rayon Bintan Center';
+                                    } elseif ($row['unit'] == 18302) {
+                                        $row['unit'] = 'Rayon Kijang';
+                                    } elseif ($row['unit'] == 18303) {
+                                        $row['unit'] = 'Rayon Tg. Uban';
+                                    } elseif ($row['unit'] == 18304) {
+                                        $row['unit'] = 'Rayon Belakang Padang';
+                                    } elseif ($row['unit'] == 18305) {
+                                        $row['unit'] = 'Rayon Tg. Balai Karimun';
+                                    } elseif ($row['unit'] == 18306) {
+                                        $row['unit'] = 'Rayon Tg. Batu';
+                                    } elseif ($row['unit'] == 18307) {
+                                        $row['unit'] = 'Rayon Dabosingkep';
+                                    } elseif ($row['unit'] == 18308) {
+                                        $row['unit'] = 'Rayon Natuna';
+                                    } elseif ($row['unit'] == 18309) {
+                                        $row['unit'] = 'Rayon Tanjungpinang Kota';
+                                    } elseif ($row['unit'] == 18310) {
+                                        $row['unit'] = 'Rayon Anambas';
+                                    }
+                                    
+                                    
+                                        echo '<td style="text-align: center">'.$row['username'].'</td>
+                                              <td style="text-align: center">'.$row['nama'].'<br/>'.$row['nip'].'</td>
+                                              <td style="text-align: center">'.$row['admin'].'</td>
+                                              <td style="text-align: center">'.$row['unit'].'</td>    
+                                              <td style="text-align: center">';
 
                                     if($_SESSION['username'] == $row['username']){
                                         echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
@@ -137,9 +172,9 @@
                                         if($row['id_user'] == 1){
                                             echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                                         } else {
-                                          echo ' <a class="btn small blue waves-effect waves-light" href="?page=sett&sub=usr&act=edit&id_user='.$row['id_user'].'">
-                                                 <i class="material-icons">edit</i> EDIT</a>
-                                                 <a class="btn small deep-orange waves-effect waves-light" href="?page=sett&sub=usr&act=del&id_user='.$row['id_user'].'"><i class="material-icons">delete</i> DEL</a>';
+                                          echo ' <a class="btn small blue waves-effect waves-light" href="?page=usr&act=edit&id_user='.$row['id_user'].'">
+                                                 <i class="material-icons">edit</i>EDIT</a>
+                                                 <a class="btn small deep-orange waves-effect waves-light" href="?page=usr&act=del&id_user='.$row['id_user'].'"><i class="material-icons">delete</i> DEL</a>';
                                         }
                                     } echo '</td>
                                     </tr>
@@ -166,8 +201,8 @@
 
                         if($pg > 1){
                             $prev = $pg - 1;
-                            echo '<li><a href="?page=sett&sub=usr&pg=1"><i class="material-icons md-48">first_page</i></a></li>
-                                  <li><a href="?page=sett&sub=usr&pg='.$prev.'"><i class="material-icons md-48">chevron_left</i></a></li>';
+                            echo '<li><a href="?page=usr&pg=1"><i class="material-icons md-48">first_page</i></a></li>
+                                  <li><a href="?page=usr&pg='.$prev.'"><i class="material-icons md-48">chevron_left</i></a></li>';
                         } else {
                             echo '<li class="disabled"><a href=""><i class="material-icons md-48">first_page</i></a></li>
                                   <li class="disabled"><a href=""><i class="material-icons md-48">chevron_left</i></a></li>';
@@ -176,16 +211,16 @@
                         //perulangan pagging
                         for($i=1; $i <= $cpg; $i++)
                             if($i != $pg){
-                                echo '<li class="waves-effect waves-dark"><a href="?page=sett&sub=usr&pg='.$i.'"> '.$i.' </a></li>';
+                                echo '<li class="waves-effect waves-dark"><a href="?page=usr&pg='.$i.'"> '.$i.' </a></li>';
                             } else {
-                                echo '<li class="active waves-effect waves-dark"><a href="?page=sett&sub=usr&pg='.$i.'"> '.$i.' </a></li>';
+                                echo '<li class="active waves-effect waves-dark"><a href="?page=usr&pg='.$i.'"> '.$i.' </a></li>';
                             }
 
                         //last and next pagging
                         if($pg < $cpg){
                             $next = $pg + 1;
-                            echo '<li><a href="?page=sett&sub=usr&pg='.$next.'"><i class="material-icons md-48">chevron_right</i></a></li>
-                                  <li><a href="?page=sett&sub=usr&pg='.$cpg.'"><i class="material-icons md-48">last_page</i></a></li>';
+                            echo '<li><a href="?page=usr&pg='.$next.'"><i class="material-icons md-48">chevron_right</i></a></li>
+                                  <li><a href="?page=usr&pg='.$cpg.'"><i class="material-icons md-48">last_page</i></a></li>';
                         } else {
                             echo '<li class="disabled"><a href=""><i class="material-icons md-48">chevron_right</i></a></li>
                                   <li class="disabled"><a href=""><i class="material-icons md-48">last_page</i></a></li>';

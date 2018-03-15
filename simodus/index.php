@@ -13,7 +13,7 @@
 <!doctype html>
 <html lang="en">
 
-<!-- Head START -->   
+<!-- Head START -->
 <head>
 
     <title>SIMODUS</title>
@@ -196,7 +196,6 @@
                                 }
                              ?>
                             </h4>
-                            <div class="batas"></div>
                         </div>
                     </div>
                     <!-- Logo and title END -->
@@ -228,7 +227,7 @@
                                     $_SESSION['username'] = $username;
                                     $_SESSION['nama'] = $nama;
                                     $_SESSION['nip'] = $nip;
-                                    $_SESSION['unit'] = $nip;
+                                    $_SESSION['unit'] = $unit;
                                     $_SESSION['admin'] = $admin;
 
                                     header("Location: ./admin.php");

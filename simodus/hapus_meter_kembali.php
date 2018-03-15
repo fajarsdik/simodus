@@ -49,9 +49,9 @@ if (empty($_SESSION['admin'])) {
 
 				            <tbody>
 				                <tr>
-				                    <td width="13%">No. Meter</td>
+				                    <td width="13%">No. Dummy</td>
 				                    <td width="1%">:</td>
-				                    <td width="86%">' . $row['no_meter'] . '</td>
+				                    <td width="86%">' . $row['no_dummy'] . '</td>
 				                </tr>
 				                <tr>
 				                    <td width="13%">Lokasi Posko</td>
