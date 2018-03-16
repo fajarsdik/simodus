@@ -7,7 +7,6 @@ if (empty($_SESSION['admin'])) {
 } else {
 
     if (isset($_REQUEST['submit'])) {
-        $id_meter = $_REQUEST['id_meter'];
         $no_dummy = $_REQUEST['no_dummy'];
         $no_meter_rusak = $_REQUEST['no_meter_rusak'];
         $alasan_rusak = $_REQUEST['alasan_rusak'];
@@ -45,7 +44,7 @@ if (empty($_SESSION['admin'])) {
                         echo '<script language="javascript">window.history.back();</script>';
                     } else {
 
-                        if (!preg_match("/^[0-9]*$/", $sisa_pulsa)) {
+                        if (!preg_match("/^[0-9.]*$/", $sisa_pulsa)) {
                             $_SESSION['sisa_pulsa'] = 'Form Sisa Pulsa harus diisi angka!';
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
@@ -55,7 +54,7 @@ if (empty($_SESSION['admin'])) {
                                 echo '<script language="javascript">window.history.back();</script>';
                             } else {
 
-                                if (!preg_match("/^[0-9]*$/", $std_dummy)) {
+                                if (!preg_match("/^[0-9.]*$/", $std_dummy)) {
                                     $_SESSION['std_dummy'] = 'Form Stand Dummy harus diisi angka!';
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
@@ -68,7 +67,7 @@ if (empty($_SESSION['admin'])) {
                                                    VALUES('','$no_dummy','$no_meter_rusak','$merk_meter_rusak','$alasan_rusak','$tgl_pakai','$ptgs_pasang',"
                                             . "'$sisa_pulsa','$no_hp_plg','$std_dummy','$aktivasi','$kembali','$nama','$id_user','$unit')");
 
-                                    $query_status = mysqli_query($config, "UPDATE tbl_metdum_stok SET status='', tgl_pakai='$tgl_pakai', no_meter_rusak='$no_meter_rusak' WHERE no_dummy='$no_dummy'");
+                                    $query_status = mysqli_query($config, "UPDATE tbl_metdum_stok SET status='', tgl_pakai='$tgl_pakai', no_meter_rusak='$no_meter_rusak', posko='' WHERE no_dummy='$no_dummy'");
 
                                     if ($query == true) {
                                         $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -228,7 +227,7 @@ if (empty($_SESSION['admin'])) {
                     </div>
                     <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Isi dengan angka">
                         <i class="material-icons prefix md-prefix">repeat_one</i>
-                        <input id="sisa_pulsa" type="number" class="validate" name="sisa_pulsa" required>
+                        <input id="sisa_pulsa" type="text" class="validate" name="sisa_pulsa" required>
                         <?php
                         if (isset($_SESSION['sisa_pulsa'])) {
                             $sisa_pulsa = $_SESSION['sisa_pulsa'];
@@ -252,7 +251,7 @@ if (empty($_SESSION['admin'])) {
                     </div>
                     <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Isi dengan angka">
                         <i class="material-icons prefix md-prefix">looks_3</i>
-                        <input id="std_dummy" type="number" class="validate" name="std_dummy" required>
+                        <input id="std_dummy" type="text" class="validate" name="std_dummy" required>
                         <?php
                         if (isset($_SESSION['std_dummy'])) {
                             $std_dummy = $_SESSION['std_dummy'];

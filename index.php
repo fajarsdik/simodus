@@ -192,7 +192,7 @@
                                 if(!empty($data['nama'])){
                                     echo ''.$data['nama'].'';
                                 } else {
-                                    echo 'SMK AL - Husna Loceret Nganjuk';
+                                    echo '';
                                 }
                              ?>
                             </h4>

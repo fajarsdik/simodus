@@ -127,15 +127,16 @@ if (empty($_SESSION['admin'])) {
                         <table class="bordered" id="tbl">
                             <thead class="blue lighten-4" id="head">
                                 <tr>
-                                    <th width="6%" style="text-align: center">No. Dummy</th>
-                                        <th width="10%" style="text-align: center">No. Meter Rusak</th>
+                                    <th width="4%" style="text-align: center">No. Dummy</th>
+                                        <th width="7%" style="text-align: center">No. Meter Rusak</th>
+                                        <th width="7%" style="text-align: center">Merk Meter Rusak</th>
                                         <th width="15%" style="text-align: center">Alasan Rusak</th>
                                         <th width="12%" style="text-align: center">Tanggal Pakai</th>
                                         <th width="13%" style="text-align: center">Petugas Pasang</th>
                                         <th width="7%" style="text-align: center">Sisa Pulsa</th>
                                         <th width="10%" style="text-align: center">No. HP Plg</th>
                                         <th width="7%" style="text-align: center">Stand Dummy</th>
-                                    <th width="10%" style="text-align: center">Tindakan <span class="right"><i class="material-icons" style="color: #333;">settings</i></span></th>
+                                        <th width="10%" style="text-align: center">Tindakan <span class="right"><i class="material-icons" style="color: #333;">settings</i></span></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -143,7 +144,7 @@ if (empty($_SESSION['admin'])) {
 
                     //script untuk mencari data
                     $unit = $_SESSION['unit'];
-                    
+
                     $query = mysqli_query($config, "SELECT * FROM tbl_metdum_pakai WHERE no_dummy LIKE '%$cari%' || no_meter_rusak LIKE '%$cari%'||"
                             . "ptgs_pasang LIKE '%$cari%' || sisa_pulsa LIKE '%$cari%' || no_hp_plg LIKE '%$cari%' || std_dummy LIKE '%$cari%'"
                             . " && unit='$unit%' ORDER by tgl_pakai DESC LIMIT $curr, $limit");
@@ -152,15 +153,76 @@ if (empty($_SESSION['admin'])) {
                         while ($row = mysqli_fetch_array($query)) {
                             echo '
                              <td style="text-align: center">' . $row['no_dummy'] . '</td>
-                             <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>
-                             <td style="text-align: center">' . $row['alasan_rusak'] . '</td>'
+                             <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>';
+
+                            if ($row['alasan_rusak'] == 1) {
+                                $alasan_rusak = "Token tidak dapat dimasukkan";
+                            } else if ($row['alasan_rusak'] == 2) {
+                                $alasan_rusak = "Sisa kredit pada kWh meter hilang/bertambah saat listrik padam";
+                            } else if ($row['alasan_rusak'] == 3) {
+                                $alasan_rusak = "Kerusakan pada keypad";
+                            } else if ($row['alasan_rusak'] == 4) {
+                                $alasan_rusak = "LCD mati/rusak";
+                            } else if ($row['alasan_rusak'] == 5) {
+                                $alasan_rusak = "kWh Meter rusak (akibat petir/terbakar)";
+                            } else if ($row['alasan_rusak'] == 6) {
+                                $alasan_rusak = "Sisa kredit tidak bertambah saat kredit baru dimasukkan";
+                            } else if ($row['alasan_rusak'] == 7) {
+                                $alasan_rusak = "Baut tutup terminal patah";
+                            } else if ($row['alasan_rusak'] == 8) {
+                                $alasan_rusak = "Tegangan dibawah 180V tidak bisa hidup";
+                            } else if ($row['alasan_rusak'] == 9) {
+                                $alasan_rusak = "Micro switch rusak / tidak keluar tegangan";
+                            } else if ($row['alasan_rusak'] == 10) {
+                                $alasan_rusak = "ID meter pada display dan nameplate tidak sama";
+                            } else if ($row['alasan_rusak'] == 11) {
+                                $alasan_rusak = "Sisa kredit tidak berkurang";
+                            } else if ($row['alasan_rusak'] == 12) {
+                                $alasan_rusak = "Display overload tanpa beban";
+                            } else if ($row['alasan_rusak'] == 13) {
+                                $alasan_rusak = "Terminal kWh meter rusak";
+                            } else if ($row['alasan_rusak'] == 14) {
+                                $alasan_rusak = "Meter periksa/tutup dibuka lampu tetap nyala";
+                            } else if ($row['alasan_rusak'] == 15) {
+                                $alasan_rusak = "Timbul rusak";
+                            } else if ($row['alasan_rusak'] == 16) {
+                                $alasan_rusak = "kWh minus";
+                            } else if ($row['alasan_rusak'] == 17) {
+                                $alasan_rusak = "kWh bertambah";
+                            } else if ($row['alasan_rusak'] == 18) {
+                                $alasan_rusak = "Lain-lain";
+                            }
+
+                            if ($row['merk_meter_rusak'] == 14) {
+                                $merk_meter_rusak = 'Hexing';
+                            } else if ($row['merk_meter_rusak'] == 86) {
+                                $merk_meter_rusak = 'Smart Meter';
+                            } else if ($row['merk_meter_rusak'] == 45) {
+                                $merk_meter_rusak = 'Sanxing';
+                            } else if ($row['merk_meter_rusak'] == 22) {
+                                $merk_meter_rusak = 'Star';
+                            } else if ($row['merk_meter_rusak'] == 60) {
+                                $merk_meter_rusak = 'FDE';
+                            } else if ($row['merk_meter_rusak'] == 32) {
+                                $merk_meter_rusak = 'Itron';
+                            } else if ($row['merk_meter_rusak'] == 34) {
+                                $merk_meter_rusak = 'Glomet';
+                            } else if ($row['merk_meter_rusak'] == 01) {
+                                $merk_meter_rusak = 'Hexing (Lama)';
+                            } else {
+                                $merk_meter_rusak = 'Merk lain';
+                            }
+
+                            echo '<td style="text-align: center">' . $merk_meter_rusak . '</td>
+
+                                 <td style="text-align: center">' . $alasan_rusak . '</td>'
                             ;
 
                             $y = substr($row['tgl_pakai'], 0, 4);
                             $m = substr($row['tgl_pakai'], 5, 2);
                             $d = substr($row['tgl_pakai'], 8, 2);
                             $h = substr($row['tgl_pakai'], 11, 2);
-                            $i = substr($row['tgl_pakai'], 14, 2);        
+                            $i = substr($row['tgl_pakai'], 14, 2);
                             $s = substr($row['tgl_pakai'], 17, 2);
 
                             if ($m == "01") {
@@ -189,29 +251,29 @@ if (empty($_SESSION['admin'])) {
                                 $nm = "Desember";
                             }
                             echo '
-                                    <td style="text-align: center">' . $d . " " . $nm . " " . $y . ' <br/> <hr/> '  . $h . ":" . $i . ":" . $s . '</td>
+                                    <td style="text-align: center">' . $d . " " . $nm . " " . $y . ' <br/> <hr/> ' . $h . ":" . $i . ":" . $s . '</td>
                                     <td style="text-align: center">' . $row['ptgs_pasang'] . '</td>
                                     <td style="text-align: center">' . $row['sisa_pulsa'] . '</td>
                                     <td style="text-align: center">' . $row['no_hp_plg'] . '</td>
                                     <td style="text-align: center">' . $row['std_dummy'] . '</td>
                                     <td style="text-align: center">';
-                            
-                            if ($_SESSION['admin'] == 1 || $_SESSION['admin'] == 4) {                            
-                            
-                            echo '<a class="btn small blue waves-effect waves-light" href="?page=atv&act=eam&id_meter=' . $row['id_meter'] . '">
+
+                            if ($_SESSION['admin'] == 1 || $_SESSION['admin'] == 4) {
+
+                                echo '<a class="btn small blue waves-effect waves-light" href="?page=atv&act=eam&id_meter=' . $row['id_meter'] . '">
                                                     <i class="material-icons"></i> Aktivasi</a>';
                             } else {
-                                
+
                                 echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                             }
-                            
+
                             echo '
                                         </td>
                                     </tr>
                                 </tbody>';
                         }
                     } else {
-                        echo '<tr><td colspan="9"><center><p class="add">Tidak ada data yang ditemukan</p></center></td></tr>';
+                        echo '<tr><td colspan="10"><center><p class="add">Tidak ada data yang ditemukan</p></center></td></tr>';
                     }
                     echo '</table><br/><br/>
                         </div>
@@ -267,8 +329,9 @@ if (empty($_SESSION['admin'])) {
                             <table class="bordered" id="tbl">
                                 <thead class="blue lighten-4" id="head">
                                     <tr>
-                                        <th width="6%" style="text-align: center">No. Dummy</th>
-                                        <th width="10%" style="text-align: center">No. Meter Rusak</th>
+                                        <th width="4%" style="text-align: center">No. Dummy</th>
+                                        <th width="7%" style="text-align: center">No. Meter Rusak</th>
+                                        <th width="7%" style="text-align: center">Merk Meter Rusak</th>
                                         <th width="15%" style="text-align: center">Alasan Rusak</th>
                                         <th width="12%" style="text-align: center">Tanggal Pakai</th>
                                         <th width="13%" style="text-align: center">Petugas Pasang</th>
@@ -302,17 +365,17 @@ if (empty($_SESSION['admin'])) {
                                                                 </div>
                                                                 <div class="modal-footer white">
                                                                     <button type="submit" class="modal-action waves-effect waves-green btn-flat" name="simpan">Simpan</button>';
-                                                                if (isset($_REQUEST['simpan'])) {
-                                                                    $id_sett = "1";
-                                                                    $aktivasi = $_REQUEST['aktivasi'];
-                                                                    $id_user = $_SESSION['id_user'];
+                                                                    if (isset($_REQUEST['simpan'])) {
+                                                                        $id_sett = "1";
+                                                                        $aktivasi = $_REQUEST['aktivasi'];
+                                                                        $id_user = $_SESSION['id_user'];
 
-                                                                    $query = mysqli_query($config, "UPDATE tbl_sett SET aktivasi='$aktivasi', id_user='$id_user' WHERE id_sett='$id_sett'");
-                                                                    if ($query == true) {
-                                                                        header("Location: ./admin.php?page=atv");
-                                                                        die();
-                                                                    }
-                                                                } echo '
+                                                                        $query = mysqli_query($config, "UPDATE tbl_sett SET aktivasi='$aktivasi', id_user='$id_user' WHERE id_sett='$id_sett'");
+                                                                        if ($query == true) {
+                                                                            header("Location: ./admin.php?page=atv");
+                                                                            die();
+                                                                        }
+                                                                    } echo '
                                                                     <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Batal</a>
                                                                 </div>
                                                             </div>
@@ -335,17 +398,77 @@ if (empty($_SESSION['admin'])) {
                         while ($row = mysqli_fetch_array($query)) {
                             echo '
                              <td style="text-align: center">' . $row['no_dummy'] . '</td>
-                             <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>
-                             <td style="text-align: center">' . $row['alasan_rusak'] . '</td>'
-                            ;
+                             <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>';
+                            
+                            if ($row['alasan_rusak'] == 1) {
+                                $alasan_rusak = "Token tidak dapat dimasukkan";
+                            } else if ($row['alasan_rusak'] == 2) {
+                                $alasan_rusak = "Sisa kredit pada kWh meter hilang/bertambah saat listrik padam";
+                            } else if ($row['alasan_rusak'] == 3) {
+                                $alasan_rusak = "Kerusakan pada keypad";
+                            } else if ($row['alasan_rusak'] == 4) {
+                                $alasan_rusak = "LCD mati/rusak";
+                            } else if ($row['alasan_rusak'] == 5) {
+                                $alasan_rusak = "kWh Meter rusak (akibat petir/terbakar)";
+                            } else if ($row['alasan_rusak'] == 6) {
+                                $alasan_rusak = "Sisa kredit tidak bertambah saat kredit baru dimasukkan";
+                            } else if ($row['alasan_rusak'] == 7) {
+                                $alasan_rusak = "Baut tutup terminal patah";
+                            } else if ($row['alasan_rusak'] == 8) {
+                                $alasan_rusak = "Tegangan dibawah 180V tidak bisa hidup";
+                            } else if ($row['alasan_rusak'] == 9) {
+                                $alasan_rusak = "Micro switch rusak / tidak keluar tegangan";
+                            } else if ($row['alasan_rusak'] == 10) {
+                                $alasan_rusak = "ID meter pada display dan nameplate tidak sama";
+                            } else if ($row['alasan_rusak'] == 11) {
+                                $alasan_rusak = "Sisa kredit tidak berkurang";
+                            } else if ($row['alasan_rusak'] == 12) {
+                                $alasan_rusak = "Display overload tanpa beban";
+                            } else if ($row['alasan_rusak'] == 13) {
+                                $alasan_rusak = "Terminal kWh meter rusak";
+                            } else if ($row['alasan_rusak'] == 14) {
+                                $alasan_rusak = "Meter periksa/tutup dibuka lampu tetap nyala";
+                            } else if ($row['alasan_rusak'] == 15) {
+                                $alasan_rusak = "Timbul rusak";
+                            } else if ($row['alasan_rusak'] == 16) {
+                                $alasan_rusak = "kWh minus";
+                            } else if ($row['alasan_rusak'] == 17) {
+                                $alasan_rusak = "kWh bertambah";
+                            } else if ($row['alasan_rusak'] == 18) {
+                                $alasan_rusak = "Lain-lain";
+                            }
+
+                            if ($row['merk_meter_rusak'] == 14) {
+                                $merk_meter_rusak = 'Hexing';
+                            } else if ($row['merk_meter_rusak'] == 86) {
+                                $merk_meter_rusak = 'Smart Meter';
+                            } else if ($row['merk_meter_rusak'] == 45) {
+                                $merk_meter_rusak = 'Sanxing';
+                            } else if ($row['merk_meter_rusak'] == 22) {
+                                $merk_meter_rusak = 'Star';
+                            } else if ($row['merk_meter_rusak'] == 60) {
+                                $merk_meter_rusak = 'FDE';
+                            } else if ($row['merk_meter_rusak'] == 32) {
+                                $merk_meter_rusak = 'Itron';
+                            } else if ($row['merk_meter_rusak'] == 34) {
+                                $merk_meter_rusak = 'Glomet';
+                            } else if ($row['merk_meter_rusak'] == 01) {
+                                $merk_meter_rusak = 'Hexing (Lama)';
+                            } else {
+                                $merk_meter_rusak = 'Merk lain';
+                            }
+
+                            echo '<td style="text-align: center">' . $merk_meter_rusak . '</td>
+                                    
+                                  <td style="text-align: center">' . $alasan_rusak . '</td>';
 
                             $y = substr($row['tgl_pakai'], 0, 4);
                             $m = substr($row['tgl_pakai'], 5, 2);
                             $d = substr($row['tgl_pakai'], 8, 2);
                             $h = substr($row['tgl_pakai'], 11, 2);
-                            $i = substr($row['tgl_pakai'], 14, 2);        
+                            $i = substr($row['tgl_pakai'], 14, 2);
                             $s = substr($row['tgl_pakai'], 17, 2);
-                            
+
                             if ($m == "01") {
                                 $nm = "Januari";
                             } elseif ($m == "02") {
@@ -372,29 +495,29 @@ if (empty($_SESSION['admin'])) {
                                 $nm = "Desember";
                             }
                             echo '
-                                    <td style="text-align: center">' . $d . " " . $nm . " " . $y . ' <br/> <hr/> '  . $h . ":" . $i . ":" . $s . '</td>
+                                    <td style="text-align: center">' . $d . " " . $nm . " " . $y . ' <br/> <hr/> ' . $h . ":" . $i . ":" . $s . '</td>
                                     <td style="text-align: center">' . $row['ptgs_pasang'] . '</td>
                                     <td style="text-align: center">' . $row['sisa_pulsa'] . '</td>
                                     <td style="text-align: center">' . $row['no_hp_plg'] . '</td>
                                     <td style="text-align: center">' . $row['std_dummy'] . '</td>
                                     <td style="text-align: center">';
 
-                            if ($_SESSION['admin'] == 1 || $_SESSION['admin'] == 4) {                            
-                            
-                            echo '<a class="btn small blue waves-effect waves-light" href="?page=atv&act=eam&id_meter=' . $row['id_meter'] . '">
+                            if ($_SESSION['admin'] == 1 || $_SESSION['admin'] == 4) {
+
+                                echo '<a class="btn small blue waves-effect waves-light" href="?page=atv&act=eam&id_meter=' . $row['id_meter'] . '">
                                                     <i class="material-icons"></i> Aktivasi</a>';
                             } else {
-                                
+
                                 echo '<button class="btn small blue-grey waves-effect waves-light"><i class="material-icons">error</i> No Action</button>';
                             }
-                            
+
                             echo '
                                         </td>
                                     </tr>
                                 </tbody>';
                         }
                     } else {
-                        echo '<tr><td colspan="9"><center><p class="add">Tidak ada data untuk diaktivasi.';
+                        echo '<tr><td colspan="10"><center><p class="add">Tidak ada data untuk diaktivasi.';
                     }
                     echo '</table>
                         </div>

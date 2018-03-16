@@ -46,8 +46,8 @@ if (empty($_SESSION['admin'])) {
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
 
-                            if (!preg_match("/^[0-9]*$/", $sisa_pulsa)) {
-                                $_SESSION['sisa_pulsa'] = 'Form Sisa Pulsa harus diisi angka!';
+                            if (!preg_match("/^[a-zA-Z0-9.,_()%&@\/\r\n -]*$/", $sisa_pulsa)) {
+                                $_SESSION['sisa_pulsa'] = 'Isi dengan angka';
                                 echo '<script language="javascript">window.history.back();</script>';
                             } else {
 
@@ -56,8 +56,8 @@ if (empty($_SESSION['admin'])) {
                                     echo '<script language="javascript">window.history.back();</script>';
                                 } else {
 
-                                    if (!preg_match("/^[0-9]*$/", $std_dummy)) {
-                                        $_SESSION['std_dummy'] = 'Form Stand Dummy harus diisi angka!';
+                                    if (!preg_match("/^[a-zA-Z0-9.,_()%&@\/\r\n -]*$/", $std_dummy)) {
+                                        $_SESSION['std_dummy'] = 'Isi dengan angka';
                                         echo '<script language="javascript">window.history.back();</script>';
                                     } else {
 
@@ -158,7 +158,7 @@ if (empty($_SESSION['admin'])) {
                         <i class="material-icons prefix md-prefix">looks_one</i><label>Alasan Rusak</label><br/>
                         <div class="input-field col s11 right">
                             <select id="alasan_rusak" type="number" class="browser-default validate" name="alasan_rusak" required>
-                                <option value="<?php echo $alasan_rusak; ?>" disabled selected> -----</option>
+                                <option value="<?php $alasan_rusak; ?>" disabled selected> -----</option>
                                 <option value="1">Token tidak dapat dimasukkan</option>
                                 <option value="2">Sisa kredit pada kWh meter hilang/bertambah saat listrik padam</option>
                                 <option value="3">Kerusakan pada keypad</option>
@@ -201,7 +201,7 @@ if (empty($_SESSION['admin'])) {
                     </div>
                     <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Isi dengan angka">
                         <i class="material-icons prefix md-prefix">repeat_one</i>
-                        <input id="sisa_pulsa" type="number" class="validate" value="" name="sisa_pulsa" required>
+                        <input id="sisa_pulsa" type="text" value="<?php echo $sisa_pulsa; ?>" name="sisa_pulsa" required>
                         <?php
                         if (isset($_SESSION['sisa_pulsa1'])) {
                             $sisa_pulsa1 = $_SESSION['sisa_pulsa1'];
@@ -225,7 +225,7 @@ if (empty($_SESSION['admin'])) {
                     </div>
                     <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Isi dengan angka">
                         <i class="material-icons prefix md-prefix">looks_3</i>
-                        <input id="std_dummy" type="number" class="validate" value="" name="std_dummy" required>
+                        <input id="std_dummy" type="text" value="<?php echo $std_dummy; ?>" name="std_dummy" required>
                         <?php
                         if (isset($_SESSION['std_dummy1'])) {
                             $std_dummy1 = $_SESSION['std_dummy1'];

@@ -44,9 +44,12 @@ if (empty($_SESSION['admin'])) {
                             $_SESSION['id_pelanggan'] = 'Form ID Pelanggan harus diisi angka!';
                             echo '<script language="javascript">window.history.back();</script>';
                         } else {
+                            
+                            $merk_meter_rusak = substr($no_meter_rusak, 0, 2);
+                            $merk_meter_baru = substr($no_meter_baru, 0, 2);
 
-                            $query = mysqli_query($config, "INSERT INTO tbl_aktivasi(id_meter,no_dummy,no_meter_rusak,no_meter_baru,id_pelanggan,tgl_aktivasi,nama,id_user,unit)
-                                                   VALUES('$id_meter','$no_dummy','$no_meter_rusak','$no_meter_baru','$id_pelanggan','$tgl_aktivasi','$nama','$id_user','$unit')");
+                            $query = mysqli_query($config, "INSERT INTO tbl_aktivasi(id_meter,no_dummy,no_meter_rusak,merk_meter_rusak,no_meter_baru,merk_meter_baru,id_pelanggan,tgl_aktivasi,nama,id_user,unit)
+                                                   VALUES('$id_meter','$no_dummy','$no_meter_rusak','$merk_meter_rusak','$no_meter_baru','$merk_meter_baru','$id_pelanggan','$tgl_aktivasi','$nama','$id_user','$unit')");
 
                             $query_aktivasi = mysqli_query($config, "UPDATE tbl_metdum_pakai SET aktivasi='aktif' WHERE id_meter='$id_meter'");
                             

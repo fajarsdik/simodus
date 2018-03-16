@@ -168,12 +168,12 @@ if (empty($_SESSION['admin'])) {
                                     <td style="text-align: center">' . $row['no_dummy'] . '</td>
                                     <td style="text-align: center">' . $row['stand'] . '</td>';
 
-                            $y = substr($row['tgl_kbl'], 0, 4);
-                            $m = substr($row['tgl_kbl'], 5, 2);
-                            $d = substr($row['tgl_kbl'], 8, 2);
-                            $h = substr($row['tgl_kbl'], 11, 2);
-                            $i = substr($row['tgl_kbl'], 14, 2);        
-                            $s = substr($row['tgl_kbl'], 17, 2);
+                            $y = substr($row['tgl_kembali'], 0, 4);
+                            $m = substr($row['tgl_kembali'], 5, 2);
+                            $d = substr($row['tgl_kembali'], 8, 2);
+                            $h = substr($row['tgl_kembali'], 11, 2);
+                            $i = substr($row['tgl_kembali'], 14, 2);        
+                            $s = substr($row['tgl_kembali'], 17, 2);
 
                             if ($m == "01") {
                                 $nm = "Januari";
@@ -338,7 +338,7 @@ if (empty($_SESSION['admin'])) {
                     //script untuk menampilkan data
                     $unit = $_SESSION['unit'];                                            
                                                                 
-                    $query = mysqli_query($config, "SELECT * FROM tbl_metdum_kbl WHERE unit LIKE '$unit%' ORDER by tgl_kbl DESC LIMIT $curr, $limit");
+                    $query = mysqli_query($config, "SELECT * FROM tbl_metdum_kbl WHERE unit LIKE '$unit%' ORDER by tgl_kembali DESC LIMIT $curr, $limit");
                     if (mysqli_num_rows($query) > 0) {
                         $no = 1;
                         while ($row = mysqli_fetch_array($query)) {
@@ -347,12 +347,12 @@ if (empty($_SESSION['admin'])) {
                              <td style="text-align: center">' . $row['stand'] . '</td>'
                             ;
 
-                            $y = substr($row['tgl_kbl'], 0, 4);
-                            $m = substr($row['tgl_kbl'], 5, 2);
-                            $d = substr($row['tgl_kbl'], 8, 2);
-                            $h = substr($row['tgl_kbl'], 11, 2);
-                            $i = substr($row['tgl_kbl'], 14, 2);        
-                            $s = substr($row['tgl_kbl'], 17, 2);
+                            $y = substr($row['tgl_kembali'], 0, 4);
+                            $m = substr($row['tgl_kembali'], 5, 2);
+                            $d = substr($row['tgl_kembali'], 8, 2);
+                            $h = substr($row['tgl_kembali'], 11, 2);
+                            $i = substr($row['tgl_kembali'], 14, 2);        
+                            $s = substr($row['tgl_kembali'], 17, 2);
 
                             if ($m == "01") {
                                 $nm = "Januari";

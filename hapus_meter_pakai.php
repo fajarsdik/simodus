@@ -51,6 +51,8 @@ if (empty($_SESSION['admin'])) {
                     $merk_meter_rusak = 'Glomet';
                 } else if ($row['merk_meter_rusak'] == 01) {
                     $merk_meter_rusak = 'Hexing (Lama)';
+                } else {
+                    $merk_meter_rusak = 'Merk lain';
                 }
 
                 if ($row['alasan_rusak'] == 1) {

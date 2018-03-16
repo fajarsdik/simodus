@@ -63,14 +63,15 @@ if (empty($_SESSION['admin'])) {
                         <table class="bordered" id="tbl">
                             <thead class="blue lighten-4" id="head">
                                 <tr>
-                                        <th width="10%" style="text-align: center">Unit</th>
-                                        <th width="10%" style="text-align: center">No. Dummy</th>
-                                        <th width="15%" style="text-align: center">No. Meter Rusak</th>
-                                        <th width="15%" style="text-align: center">Hari Layanan</th>
-                                        <th width="15%" style="text-align: center">Tgl Pakai</th>
-                                        <th width="15%" style="text-align: center">Tgl Aktivasi</th>
-                                        <th width="15%" style="text-align: center">Tgl Kembali</th>
-                                        <th width="15%" style="text-align: center">Lama Standby</th>
+                                        <th width="7%" style="text-align: center">Unit</th>
+                                        <th width="5%" style="text-align: center">No. Dummy</th>
+                                        <th width="12%" style="text-align: center">No. Meter Rusak</th>
+                                        <th width="12%" style="text-align: center">Hari Layanan</th>
+                                        <th width="12%" style="text-align: center">Tgl Pakai</th>
+                                        <th width="12%" style="text-align: center">Tgl Aktivasi</th>
+                                        <th width="12%" style="text-align: center">Tgl Kembali</th>
+                                        <th width="12%" style="text-align: center">Lama Standby</th>
+                                        <th width="10%" style="text-align: center">Posko</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -228,7 +229,7 @@ if (empty($_SESSION['admin'])) {
                                 <td style="text-align: center"> </td>';
                             }
 
-                            echo '
+                            echo '<td style="text-align: center"> ' . $row['posko'] . ' </td>
                             </tr>
                         </tbody>';
                         }
@@ -246,14 +247,15 @@ if (empty($_SESSION['admin'])) {
                             <table class="bordered" id="tbl" >
                                 <thead class="blue lighten-4" id="head">
                                     <tr>
-                                        <th width="10%" style="text-align: center">Unit</th>
-                                        <th width="10%" style="text-align: center">No. Dummy</th>
-                                        <th width="15%" style="text-align: center">No. Meter Rusak</th>
-                                        <th width="15%" style="text-align: center">Hari Layanan</th>
-                                        <th width="15%" style="text-align: center">Tgl Pakai</th>
-                                        <th width="15%" style="text-align: center">Tgl Aktivasi</th>
-                                        <th width="15%" style="text-align: center">Tgl Kembali</th>
-                                        <th width="15%" style="text-align: center">Lama Standby</th>
+                                        <th width="7%" style="text-align: center">Unit</th>
+                                        <th width="5%" style="text-align: center">No. Dummy</th>
+                                        <th width="12%" style="text-align: center">No. Meter Rusak</th>
+                                        <th width="12%" style="text-align: center">Hari Layanan</th>
+                                        <th width="12%" style="text-align: center">Tgl Pakai</th>
+                                        <th width="12%" style="text-align: center">Tgl Aktivasi</th>
+                                        <th width="12%" style="text-align: center">Tgl Kembali</th>
+                                        <th width="12%" style="text-align: center">Lama Standby</th>
+                                        <th width="10%" style="text-align: center">Posko</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -416,7 +418,7 @@ if (empty($_SESSION['admin'])) {
                                 <td style="text-align: center"> </td>';
                             }
 
-                            echo '
+                            echo '<td style="text-align: center"> ' . $row['posko'] . ' </td>
                             </tr>
                         </tbody>';
                         }
@@ -481,13 +483,14 @@ if (empty($_SESSION['admin'])) {
                             <thead class="blue lighten-4" id="head">
                                 <tr>
                                         
-                                        <th width="10%" style="text-align: center">No. Dummy</th>
-                                        <th width="15%" style="text-align: center">No. Meter Rusak</th>
-                                        <th width="15%" style="text-align: center">Hari Layanan</th>
-                                        <th width="15%" style="text-align: center">Tgl Pakai</th>
-                                        <th width="15%" style="text-align: center">Tgl Aktivasi</th>
-                                        <th width="15%" style="text-align: center">Tgl Kembali</th>
-                                        <th width="15%" style="text-align: center">Lama Standby</th>
+                                        <th width="5%" style="text-align: center">No. Dummy</th>
+                                        <th width="12%" style="text-align: center">No. Meter Rusak</th>
+                                        <th width="12%" style="text-align: center">Hari Layanan</th>
+                                        <th width="12%" style="text-align: center">Tgl Pakai</th>
+                                        <th width="12%" style="text-align: center">Tgl Aktivasi</th>
+                                        <th width="12%" style="text-align: center">Tgl Kembali</th>
+                                        <th width="12%" style="text-align: center">Lama Standby</th>
+                                        <th width="10%" style="text-align: center">Posko</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -501,20 +504,17 @@ if (empty($_SESSION['admin'])) {
                                 $no = 1;
                                 while ($row = mysqli_fetch_array($query)) {
                                     echo '
-                        <td style="text-align: center">' . $row['no_dummy'] . '</td>
-                        <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>';
+                                    <td style="text-align: center">' . $row['no_dummy'] . '</td>
+                                    <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>';
 
                                     if (!empty($row['tgl_pakai']) && $row['tgl_kbl'] < $row['tgl_pakai']) {
                                         $hari_layanan = date("Y-m-d H:i:s") - $row['tgl_pakai'];
                                         echo '   
-                                <td style="text-align: center">' . $hari_layanan . ' hari</td>';
+                                            <td style="text-align: center">' . $hari_layanan . ' hari</td>';
                                     } else {
                                         echo '   
-                                <td style="text-align: center"> </td>';
+                                            <td style="text-align: center"> </td>';
                                     }
-
-
-
 
                                     //perhitungan tgl pakai
                                     if (empty($row['tgl_pakai'])) {
@@ -552,7 +552,7 @@ if (empty($_SESSION['admin'])) {
                                         }
 
                                         echo '
-                                <td style="text-align: center">' . $d . " " . $nm . " " . $y . '</td>';
+                                        <td style="text-align: center">' . $d . " " . $nm . " " . $y . '</td>';
                                     }
 
                                     //perhitungan tgl aktivasi
@@ -593,7 +593,7 @@ if (empty($_SESSION['admin'])) {
                                         }
 
                                         echo '
-                                <td style="text-align: center">' . $d . " " . $nm . " " . $y . '</td>';
+                                        <td style="text-align: center">' . $d . " " . $nm . " " . $y . '</td>';
                                     }
 
                                     //perhitungan tgl kembali
@@ -634,7 +634,7 @@ if (empty($_SESSION['admin'])) {
                                         }
 
                                         echo '
-                                <td style="text-align: center">' . $d . " " . $nm . " " . $y . '</td>';
+                                        <td style="text-align: center">' . $d . " " . $nm . " " . $y . '</td>';
                                     }
 
                                     //perhitungan lama standby
@@ -644,12 +644,12 @@ if (empty($_SESSION['admin'])) {
                                         '<td style="text-align: center">' . $lama_standby . ' Hari</td>';
                                     } else {
                                         echo '   
-                                <td style="text-align: center"> </td>';
+                                        <td style="text-align: center"> </td>';
                                     }
 
-                                    echo '
-                            </tr>
-                        </tbody>';
+                                    echo '<td style="text-align: center"> ' . $row['posko'] . ' </td>
+                                    </tr>
+                                </tbody>';
                                 }
                             } else {
                                 echo '<tr><td colspan="5"><center><p class="add">Tidak ada data untuk ditampilkan.</p></center></td></tr>';
@@ -665,13 +665,14 @@ if (empty($_SESSION['admin'])) {
                             <table class="bordered responsive-table" id="tbl" >
                                 <thead class="blue lighten-4" id="head">
                                     <tr>
-                                        <th width="10%" style="text-align: center">No. Dummy</th>
-                                        <th width="15%" style="text-align: center">No. Meter Rusak</th>
-                                        <th width="15%" style="text-align: center">Hari Layanan</th>
-                                        <th width="15%" style="text-align: center">Tgl Pakai</th>
-                                        <th width="15%" style="text-align: center">Tgl Aktivasi</th>
-                                        <th width="15%" style="text-align: center">Tgl Kembali</th>
-                                        <th width="15%" style="text-align: center">Lama Standby</th>
+                                        <th width="5%" style="text-align: center">No. Dummy</th>
+                                        <th width="12%" style="text-align: center">No. Meter Rusak</th>
+                                        <th width="12%" style="text-align: center">Hari Layanan</th>
+                                        <th width="12%" style="text-align: center">Tgl Pakai</th>
+                                        <th width="12%" style="text-align: center">Tgl Aktivasi</th>
+                                        <th width="12%" style="text-align: center">Tgl Kembali</th>
+                                        <th width="12%" style="text-align: center">Lama Standby</th>
+                                        <th width="10%" style="text-align: center">Posko</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -833,7 +834,7 @@ if (empty($_SESSION['admin'])) {
                                 <td style="text-align: center"> </td>';
                                     }
 
-                                    echo '
+                                    echo '<td style="text-align: center"> ' . $row['posko'] . ' </td>
                             </tr>
                         </tbody>';
                                 }

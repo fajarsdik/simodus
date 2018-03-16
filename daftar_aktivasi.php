@@ -49,7 +49,7 @@ if (empty($_SESSION['admin'])) {
                                         <li class="waves-effect waves-light hide-on-small-only  active"><a href="?page=dft_atv" class="judul"><i class="material-icons">done_all</i> History Aktivasi</a></li>
                                     </ul>
                                 </div>
-                                <div class="col m4 hide-on-med-and-down">
+                                <div class="col m5 hide-on-med-and-down">
                                     <form method="post" action="?page=dft_atv">
                                         <div class="input-field round-in-box">
                                             <input id="search" type="search" name="cari" placeholder="Pencarian data..." required>
@@ -57,14 +57,6 @@ if (empty($_SESSION['admin'])) {
                                             <input type="submit" name="submit" class="hidden">
                                         </div>
                                     </form>
-                                </div>
-                                <div class="col m1">
-                                    <ul class="left">
-                                        
-                                        <li class="waves-effect waves-light">
-                                            <a href=""><i class="material-icons md-24"></i>Export Excel</a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </nav>
@@ -138,7 +130,9 @@ if (empty($_SESSION['admin'])) {
                                 <tr>
                                     <th width="6%" style="text-align: center">No. Dummy</th>
                                         <th width="10%" style="text-align: center">No. Meter Rusak</th>
+                                        <th width="10%" style="text-align: center">Merk Meter Rusak</th>
                                         <th width="10%" style="text-align: center">No. Meter Baru</th>
+                                        <th width="10%" style="text-align: center">Merk Meter Baru</th>
                                         <th width="10%" style="text-align: center">ID Pelanggan</th>
                                         <th width="12%" style="text-align: center">Tanggal Aktivasi</th>
                                         <th width="13%" style="text-align: center">Petugas Aktivasi</th>
@@ -150,7 +144,7 @@ if (empty($_SESSION['admin'])) {
 
                     //script untuk mencari data
                     $unit = $_SESSION['unit'];
-                    
+
                     $query = mysqli_query($config, "SELECT * FROM tbl_aktivasi WHERE no_dummy LIKE '%$cari%' || no_meter_rusak LIKE '%$cari%'||"
                             . "no_meter_baru LIKE '%$cari%' || id_pelanggan LIKE '%$cari%' || nama LIKE '%$cari%' && unit='$unit%' ORDER by tgl_aktivasi DESC LIMIT $curr, $limit");
                     if (mysqli_num_rows($query) > 0) {
@@ -158,16 +152,59 @@ if (empty($_SESSION['admin'])) {
                         while ($row = mysqli_fetch_array($query)) {
                             echo '
                              <td style="text-align: center">' . $row['no_dummy'] . '</td>
-                             <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>
-                             <td style="text-align: center">' . $row['no_meter_baru'] . '</td>
-                             <td style="text-align: center">' . $row['id_pelanggan'] . '</td>'
-                            ;
+                             <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>';
+
+                            if ($row['merk_meter_rusak'] == 14) {
+                                $merk_meter_rusak = 'Hexing';
+                            } else if ($row['merk_meter_rusak'] == 86) {
+                                $merk_meter_rusak = 'Smart Meter';
+                            } else if ($row['merk_meter_rusak'] == 45) {
+                                $merk_meter_rusak = 'Sanxing';
+                            } else if ($row['merk_meter_rusak'] == 22) {
+                                $merk_meter_rusak = 'Star';
+                            } else if ($row['merk_meter_rusak'] == 60) {
+                                $merk_meter_rusak = 'FDE';
+                            } else if ($row['merk_meter_rusak'] == 32) {
+                                $merk_meter_rusak = 'Itron';
+                            } else if ($row['merk_meter_rusak'] == 34) {
+                                $merk_meter_rusak = 'Glomet';
+                            } else if ($row['merk_meter_rusak'] == 01) {
+                                $merk_meter_rusak = 'Hexing (Lama)';
+                            } else {
+                                $merk_meter_rusak = 'Merk lain';
+                            }
+
+                            echo '<td style="text-align: center">' . $merk_meter_rusak . '</td>
+                                  <td style = "text-align: center">' . $row['no_meter_baru'] . '</td>';
+                                      
+                            if ($row['merk_meter_baru'] == 14) {
+                                $merk_meter_baru = 'Hexing';
+                            } else if ($row['merk_meter_baru'] == 86) {
+                                $merk_meter_baru = 'Smart Meter';
+                            } else if ($row['merk_meter_baru'] == 45) {
+                                $merk_meter_baru = 'Sanxing';
+                            } else if ($row['merk_meter_baru'] == 22) {
+                                $merk_meter_baru = 'Star';
+                            } else if ($row['merk_meter_baru'] == 60) {
+                                $merk_meter_baru = 'FDE';
+                            } else if ($row['merk_meter_baru'] == 32) {
+                                $merk_meter_baru = 'Itron';
+                            } else if ($row['merk_meter_baru'] == 34) {
+                                $merk_meter_baru = 'Glomet';
+                            } else if ($row['merk_meter_baru'] == 01) {
+                                $merk_meter_baru = 'Hexing (Lama)';
+                            } else {
+                                $merk_meter_baru = 'Merk lain';
+                            }
+
+                            echo '<td style = "text-align: center">' . $merk_meter_baru . '</td>     
+                                  <td style = "text-align: center">' . $row['id_pelanggan'] . '</td>';
 
                             $y = substr($row['tgl_aktivasi'], 0, 4);
                             $m = substr($row['tgl_aktivasi'], 5, 2);
                             $d = substr($row['tgl_aktivasi'], 8, 2);
                             $h = substr($row['tgl_aktivasi'], 11, 2);
-                            $i = substr($row['tgl_aktivasi'], 14, 2);        
+                            $i = substr($row['tgl_aktivasi'], 14, 2);
                             $s = substr($row['tgl_aktivasi'], 17, 2);
 
                             if ($m == "01") {
@@ -196,130 +233,132 @@ if (empty($_SESSION['admin'])) {
                                 $nm = "Desember";
                             }
                             echo '
-                                    <td style="text-align: center">' . $d . " " . $nm . " " . $y . ' <br/> <hr/> '  . $h . ":" . $i . ":" . $s . '</td>
-                                    <td style="text-align: center">' . $row['nama'] . '</td>
-                                    <td style="text-align: center">';
-                            
-                            echo '<button class="btn small green waves-effect waves-light"><i class="material-icons">check</i> Aktif</button>';
-                            
+                            <td style = "text-align: center">' . $d . " " . $nm . " " . $y . ' <br/> <hr/> ' . $h . ":" . $i . ":" . $s . '</td>
+                            <td style = "text-align: center">' . $row['nama'] . '</td>
+                            <td style = "text-align: center">';
+
+                            echo '<button class = "btn small green waves-effect waves-light"><i class = "material-icons">check</i> Aktif</button>';
+
                             echo '
-                                        </td>
-                                    </tr>
-                                </tbody>';
+                            </td>
+                            </tr>
+                            </tbody>';
                         }
                     } else {
-                        echo '<tr><td colspan="9"><center><p class="add">Tidak ada data yang ditemukan</p></center></td></tr>';
+                        echo '<tr><td colspan = "9"><center><p class = "add">Tidak ada data yang ditemukan</p></center></td></tr>';
                     }
                     echo '</table><br/><br/>
-                        </div>
-                    </div>
-                    <!-- Row form END -->';
+                            </div>
+                            </div>
+                            <!--Row form END -->';
 
                     $query = mysqli_query($config, "SELECT * FROM tbl_aktivasi");
                     $cdata = mysqli_num_rows($query);
                     $cpg = ceil($cdata / $limit);
 
-                    echo '<!-- Pagination START -->
-                          <ul class="pagination">';
+                    echo '<!--Pagination START -->
+                            <ul class = "pagination">';
 
                     if ($cdata > $limit) {
 
                         //first and previous pagging
                         if ($pg > 1) {
                             $prev = $pg - 1;
-                            echo '<li><a href="?page=dft_atv&pg=1"><i class="material-icons md-48">first_page</i></a></li>
-                                  <li><a href="?page=dft_atv&pg=' . $prev . '"><i class="material-icons md-48">chevron_left</i></a></li>';
+                            echo '<li><a href = "?page=dft_atv&pg=1"><i class = "material-icons md-48">first_page</i></a></li>
+                            <li><a href = "?page=dft_atv&pg=' . $prev . '"><i class = "material-icons md-48">chevron_left</i></a></li>';
                         } else {
-                            echo '<li class="disabled"><a href=""><i class="material-icons md-48">first_page</i></a></li>
-                                  <li class="disabled"><a href=""><i class="material-icons md-48">chevron_left</i></a></li>';
+                            echo '<li class = "disabled"><a href = ""><i class = "material-icons md-48">first_page</i></a></li>
+                            <li class = "disabled"><a href = ""><i class = "material-icons md-48">chevron_left</i></a></li>';
                         }
 
                         //perulangan pagging
                         for ($i = 1; $i <= $cpg; $i++)
                             if ($i != $pg) {
-                                echo '<li class="waves-effect waves-dark"><a href="?page=dft_atv&pg=' . $i . '"> ' . $i . ' </a></li>';
+                                echo '<li class = "waves-effect waves-dark"><a href = "?page=dft_atv&pg=' . $i . '"> ' . $i . ' </a></li>';
                             } else {
-                                echo '<li class="active waves-effect waves-dark"><a href="?page=dft_atv&pg=' . $i . '"> ' . $i . ' </a></li>';
+                                echo '<li class = "active waves-effect waves-dark"><a href = "?page=dft_atv&pg=' . $i . '"> ' . $i . ' </a></li>';
                             }
 
                         //last and next pagging
                         if ($pg < $cpg) {
                             $next = $pg + 1;
-                            echo '<li><a href="?page=dft_atv&pg=' . $next . '"><i class="material-icons md-48">chevron_right</i></a></li>
-                                  <li><a href="?page=dft_atv&pg=' . $cpg . '"><i class="material-icons md-48">last_page</i></a></li>';
+                            echo '<li><a href = "?page=dft_atv&pg=' . $next . '"><i class = "material-icons md-48">chevron_right</i></a></li>
+                            <li><a href = "?page=dft_atv&pg=' . $cpg . '"><i class = "material-icons md-48">last_page</i></a></li>';
                         } else {
-                            echo '<li class="disabled"><a href=""><i class="material-icons md-48">chevron_right</i></a></li>
-                                  <li class="disabled"><a href=""><i class="material-icons md-48">last_page</i></a></li>';
+                            echo '<li class = "disabled"><a href = ""><i class = "material-icons md-48">chevron_right</i></a></li>
+                            <li class = "disabled"><a href = ""><i class = "material-icons md-48">last_page</i></a></li>';
                         }
                         echo '
-                        </ul>
-                        <!-- Pagination END -->';
+                            </ul>
+                            <!--Pagination END -->';
                     } else {
                         echo '';
                     }
                 } else {
 
                     echo '
-                        <div class="col m12" id="colres">
-                            <table class="bordered" id="tbl">
-                                <thead class="blue lighten-4" id="head">
-                                    <tr>
-                                        <th width="6%" style="text-align: center">No. Dummy</th>
-                                        <th width="10%" style="text-align: center">No. Meter Rusak</th>
-                                        <th width="10%" style="text-align: center">No. Meter Baru</th>
-                                        <th width="10%" style="text-align: center">ID Pelanggan</th>
-                                        <th width="12%" style="text-align: center">Tanggal Aktivasi</th>
-                                        <th width="13%" style="text-align: center">Petugas Aktivasi</th>
-                                        <th width="10%" style="text-align: center">Status <span class="right tooltipped" data-position="left" data-tooltip="Atur jumlah data yang ditampilkan"><a class="modal-trigger" href="#modal"><i class="material-icons" style="color: #333;">settings</i></a></span></th>
+                            <div class = "col m12" id = "colres">
+                            <table class = "bordered" id = "tbl">
+                            <thead class = "blue lighten-4" id = "head">
+                            <tr>
+                            <th width = "6%" style = "text-align: center">No. Dummy</th>
+                            <th width = "10%" style = "text-align: center">No. Meter Rusak</th>
+                            <th width = "10%" style = "text-align: center">Merk Meter Rusak</th>
+                            <th width = "10%" style = "text-align: center">No. Meter Baru</th>
+                            <th width = "10%" style = "text-align: center">Merk Meter Baru</th>
+                            <th width = "10%" style = "text-align: center">ID Pelanggan</th>
+                            <th width = "12%" style = "text-align: center">Tanggal Aktivasi</th>
+                            <th width = "13%" style = "text-align: center">Petugas Aktivasi</th>
+                            <th width = "10%" style = "text-align: center">Status <span class = "right tooltipped" data-position = "left" data-tooltip = "Atur jumlah data yang ditampilkan"><a class = "modal-trigger" href = "#modal"><i class = "material-icons" style = "color: #333;">settings</i></a></span></th>
 
-                                            <div id="modal" class="modal">
-                                                <div class="modal-content white">
-                                                    <h5>Jumlah data yang ditampilkan per halaman</h5>';
-                                                    $query = mysqli_query($config, "SELECT id_sett, dft_aktivasi FROM tbl_sett");
-                                                    list($id_sett, $dft_aktivasi) = mysqli_fetch_array($query);
-                                                    echo '
-                                                    <div class="row">
-                                                        <form method="post" action="">
-                                                            <div class="input-field col s12">
-                                                                <input type="hidden" value="' . $id_sett . '" name="id_sett">
-                                                                <div class="input-field col s1" style="float: left;">
-                                                                    <i class="material-icons prefix md-prefix">looks_one</i>
-                                                                </div>
-                                                                <div class="input-field col s11 right" style="margin: -5px 0 20px;">
-                                                                    <select class="browser-default validate" name="dft_aktivasi" required>
-                                                                        <option value="' . $dft_aktivasi . '">' . $dft_aktivasi . '</option>
-                                                                        <option value="5">5</option>
-                                                                        <option value="10">10</option>
-                                                                        <option value="20">20</option>
-                                                                        <option value="50">50</option>
-                                                                        <option value="100">100</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="modal-footer white">
-                                                                    <button type="submit" class="modal-action waves-effect waves-green btn-flat" name="simpan">Simpan</button>';
-                                                                if (isset($_REQUEST['simpan'])) {
-                                                                    $id_sett = "1";
-                                                                    $dft_aktivasi = $_REQUEST['dft_aktivasi'];
-                                                                    $id_user = $_SESSION['id_user'];
+                            <div id = "modal" class = "modal">
+                            <div class = "modal-content white">
+                            <h5>Jumlah data yang ditampilkan per halaman</h5>';
+                    $query = mysqli_query($config, "SELECT id_sett, dft_aktivasi FROM tbl_sett");
+                    list($id_sett, $dft_aktivasi) = mysqli_fetch_array($query);
+                    echo '
+                            <div class = "row">
+                            <form method = "post" action = "">
+                            <div class = "input-field col s12">
+                            <input type = "hidden" value = "' . $id_sett . '" name = "id_sett">
+                            <div class = "input-field col s1" style = "float: left;">
+                            <i class = "material-icons prefix md-prefix">looks_one</i>
+                            </div>
+                            <div class = "input-field col s11 right" style = "margin: -5px 0 20px;">
+                            <select class = "browser-default validate" name = "dft_aktivasi" required>
+                            <option value = "' . $dft_aktivasi . '">' . $dft_aktivasi . '</option>
+                            <option value = "5">5</option>
+                            <option value = "10">10</option>
+                            <option value = "20">20</option>
+                            <option value = "50">50</option>
+                            <option value = "100">100</option>
+                            </select>
+                            </div>
+                            <div class = "modal-footer white">
+                            <button type = "submit" class = "modal-action waves-effect waves-green btn-flat" name = "simpan">Simpan</button>';
+                    if (isset($_REQUEST['simpan'])) {
+                        $id_sett = "1";
+                        $dft_aktivasi = $_REQUEST['dft_aktivasi'];
+                        $id_user = $_SESSION['id_user'];
 
-                                                                    $query = mysqli_query($config, "UPDATE tbl_sett SET dft_aktivasi='$dft_aktivasi', id_user='$id_user' WHERE id_sett='$id_sett'");
-                                                                    if ($query == true) {
-                                                                        header("Location: ./admin.php?page=dft_atv");
-                                                                        die();
-                                                                    }
-                                                                } echo '
-                                                                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Batal</a>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        $query = mysqli_query($config, "UPDATE tbl_sett SET dft_aktivasi='$dft_aktivasi', id_user='$id_user' WHERE id_sett='$id_sett'");
+                        if ($query == true) {
+                            header("Location: ./admin.php?page=dft_atv");
+                            die();
+                        }
+                    } echo '
+                            <a href = "#!" class = " modal-action modal-close waves-effect waves-green btn-flat">Batal</a>
+                            </div>
+                            </div>
+                            </form>
+                            </div>
+                            </div>
+                            </div>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>';
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>';
 
                     //script untuk menampilkan data
                     $unit = $_SESSION['unit'];
@@ -329,17 +368,60 @@ if (empty($_SESSION['admin'])) {
                         $no = 1;
                         while ($row = mysqli_fetch_array($query)) {
                             echo '
-                             <td style="text-align: center">' . $row['no_dummy'] . '</td>
-                             <td style="text-align: center">' . $row['no_meter_rusak'] . '</td>
-                             <td style="text-align: center">' . $row['no_meter_baru'] . '</td>
-                             <td style="text-align: center">' . $row['id_pelanggan'] . '</td>
-                            ';
+                            <td style = "text-align: center">' . $row['no_dummy'] . '</td>
+                            <td style = "text-align: center">' . $row['no_meter_rusak'] . '</td>';
+
+                            if ($row['merk_meter_rusak'] == 14) {
+                                $merk_meter_rusak = 'Hexing';
+                            } else if ($row['merk_meter_rusak'] == 86) {
+                                $merk_meter_rusak = 'Smart Meter';
+                            } else if ($row['merk_meter_rusak'] == 45) {
+                                $merk_meter_rusak = 'Sanxing';
+                            } else if ($row['merk_meter_rusak'] == 22) {
+                                $merk_meter_rusak = 'Star';
+                            } else if ($row['merk_meter_rusak'] == 60) {
+                                $merk_meter_rusak = 'FDE';
+                            } else if ($row['merk_meter_rusak'] == 32) {
+                                $merk_meter_rusak = 'Itron';
+                            } else if ($row['merk_meter_rusak'] == 34) {
+                                $merk_meter_rusak = 'Glomet';
+                            } else if ($row['merk_meter_rusak'] == 01) {
+                                $merk_meter_rusak = 'Hexing (Lama)';
+                            } else {
+                                $merk_meter_rusak = 'Merk lain';
+                            }
+
+                            echo '<td style = "text-align: center">' . $merk_meter_rusak . '</td>
+                            <td style = "text-align: center">' . $row['no_meter_baru'] . '</td>';
+                            
+                            if ($row['merk_meter_baru'] == 14) {
+                                $merk_meter_baru = 'Hexing';
+                            } else if ($row['merk_meter_baru'] == 86) {
+                                $merk_meter_baru = 'Smart Meter';
+                            } else if ($row['merk_meter_baru'] == 45) {
+                                $merk_meter_baru = 'Sanxing';
+                            } else if ($row['merk_meter_baru'] == 22) {
+                                $merk_meter_baru = 'Star';
+                            } else if ($row['merk_meter_baru'] == 60) {
+                                $merk_meter_baru = 'FDE';
+                            } else if ($row['merk_meter_baru'] == 32) {
+                                $merk_meter_baru = 'Itron';
+                            } else if ($row['merk_meter_baru'] == 34) {
+                                $merk_meter_baru = 'Glomet';
+                            } else if ($row['merk_meter_baru'] == 01) {
+                                $merk_meter_baru = 'Hexing (Lama)';
+                            } else {
+                                $merk_meter_baru = 'Merk lain';
+                            }
+
+                            echo '<td style = "text-align: center">' . $merk_meter_baru . '</td>
+                            <td style = "text-align: center">' . $row['id_pelanggan'] . '</td>';
 
                             $y = substr($row['tgl_aktivasi'], 0, 4);
                             $m = substr($row['tgl_aktivasi'], 5, 2);
                             $d = substr($row['tgl_aktivasi'], 8, 2);
                             $h = substr($row['tgl_aktivasi'], 11, 2);
-                            $i = substr($row['tgl_aktivasi'], 14, 2);        
+                            $i = substr($row['tgl_aktivasi'], 14, 2);
                             $s = substr($row['tgl_aktivasi'], 17, 2);
 
                             if ($m == "01") {
@@ -368,64 +450,64 @@ if (empty($_SESSION['admin'])) {
                                 $nm = "Desember";
                             }
                             echo '
-                                    <td style="text-align: center">' . $d . " " . $nm . " " . $y . ' <br/> <hr/> '  . $h . ":" . $i . ":" . $s . '</td>
-                                    <td style="text-align: center">' . $row['nama'] . '</td>
-                                    <td style="text-align: center">';
+                            <td style = "text-align: center">' . $d . " " . $nm . " " . $y . ' <br/> <hr/> ' . $h . ":" . $i . ":" . $s . '</td>
+                            <td style = "text-align: center">' . $row['nama'] . '</td>
+                            <td style = "text-align: center">';
 
 
-                            echo '<button class="btn small green waves-effect waves-light"><i class="material-icons">check</i> Aktif</button>';
+                            echo '<button class = "btn small green waves-effect waves-light"><i class = "material-icons">check</i> Aktif</button>';
                             echo '
-                                        </td>
-                                    </tr>
-                                </tbody>';
+                            </td>
+                            </tr>
+                            </tbody>';
                         }
                     } else {
-                        echo '<tr><td colspan="9"><center><p class="add">Tidak ada data yg sudah diaktivasi.';
+                        echo '<tr><td colspan = "9"><center><p class = "add">Tidak ada data yg sudah diaktivasi.';
                     }
                     echo '</table>
-                        </div>
-                    </div>
-                    <!-- Row form END -->';
+                            </div>
+                            </div>
+                            <!--Row form END -->';
 
                     $query = mysqli_query($config, "SELECT * FROM tbl_metdum_pakai WHERE aktivasi='non aktif'");
                     $cdata = mysqli_num_rows($query);
                     $cpg = ceil($cdata / $limit);
 
-                    echo '<br/><!-- Pagination START -->
-                          <ul class="pagination">';
+                    echo '<br/><!--Pagination START -->
+                            <ul class = "pagination">';
 
                     if ($cdata > $limit) {
 
                         //first and previous pagging
                         if ($pg > 1) {
                             $prev = $pg - 1;
-                            echo '<li><a href="?page=dft_atv&pg=1"><i class="material-icons md-48">first_page</i></a></li>
-                                  <li><a href="?page=dft_atv&pg=' . $prev . '"><i class="material-icons md-48">chevron_left</i></a></li>';
+                            echo '<li><a href = "?page=dft_atv&pg=1"><i class = "material-icons md-48">first_page</i></a></li>
+                            <li><a href = "?page=dft_atv&pg=' . $prev . '"><i class = "material-icons md-48">chevron_left</i></a></li>';
                         } else {
-                            echo '<li class="disabled"><a href=""><i class="material-icons md-48">first_page</i></a></li>
-                                  <li class="disabled"><a href=""><i class="material-icons md-48">chevron_left</i></a></li>';
+                            echo '<li class = "disabled"><a href = ""><i class = "material-icons md-48">first_page</i></a></li>
+                            <li class = "disabled"><a href = ""><i class = "material-icons md-48">chevron_left</i></a></li>';
                         }
 
                         //perulangan pagging
                         for ($i = 1; $i <= $cpg; $i++)
                             if ($i != $pg) {
-                                echo '<li class="waves-effect waves-dark"><a href="?page=dft_atv&pg=' . $i . '"> ' . $i . ' </a></li>';
+                                echo '<li class = "waves-effect waves-dark"><a href = "?page=dft_atv&pg=' . $i . '"> ' . $i . ' </a></li>';
                             } else {
-                                echo '<li class="active waves-effect waves-dark"><a href="?page=dft_atv&pg=' . $i . '"> ' . $i . ' </a></li>';
+                                echo '<li class = "active waves-effect waves-dark"><a href = "?page=dft_atv&pg=' . $i . '"> ' . $i . ' </a></li>';
                             }
 
                         //last and next pagging
                         if ($pg < $cpg) {
                             $next = $pg + 1;
-                            echo '<li><a href="?page=dft_atv&pg=' . $next . '"><i class="material-icons md-48">chevron_right</i></a></li>
-                                  <li><a href="?page=dft_atv&pg=' . $cpg . '"><i class="material-icons md-48">last_page</i></a></li>';
+                            echo '<li><a href = "?page=dft_atv&pg=' . $next . '"><i class = "material-icons md-48">chevron_right</i></a></li>
+                            <li><a href = "?page=dft_atv&pg=' . $cpg . '"><i class = "material-icons md-48">last_page</i></a></li>';
                         } else {
-                            echo '<li class="disabled"><a href=""><i class="material-icons md-48">chevron_right</i></a></li>
-                                  <li class="disabled"><a href=""><i class="material-icons md-48">last_page</i></a></li>';
+                            echo '<li class = "disabled"><a href = ""><i class = "material-icons md-48">chevron_right</i></a></li>
+                            <li class = "disabled"><a href = ""><i class = "material-icons md-48">last_page</i></a></li>';
                         }
                         echo '
-                        </ul>
-                        <!-- Pagination END -->';
+                            </ul>
+                            <!--Pagination END -->';
                     } else {
                         echo '';
                     }

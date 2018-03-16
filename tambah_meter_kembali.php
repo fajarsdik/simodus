@@ -20,7 +20,7 @@ if (empty($_SESSION['admin'])) {
             $lokasi_posko = $_REQUEST['lokasi_posko'];
             $nama_cc = $_REQUEST['nama_cc'];
             $stand = $_REQUEST['stand'];
-            $tgl_kbl = date("Y-m-d H:i:s");
+            $tgl_kembali = date("Y-m-d H:i:s");
             $nama = $_SESSION['nama'];
             $id_user = $_SESSION['id_user'];
             $unit = $_SESSION['unit'];
@@ -31,7 +31,7 @@ if (empty($_SESSION['admin'])) {
                 echo '<script language="javascript">window.history.back();</script>';
             } else {
 
-                if (!preg_match("/^[0-9]*$/", $stand)) {
+                if (!preg_match("/^[a-zA-Z0-9.,_()%&@\/\r\n -]*$/", $stand)) {
                     $_SESSION['stand'] = 'Form Stand Bongkar harus diisi angka!';
                     echo '<script language="javascript">window.history.back();</script>';
                 } else {
@@ -47,12 +47,12 @@ if (empty($_SESSION['admin'])) {
                         } else {
 
                             //jika form file tidak kosong akan mengeksekusi script dibawah ini
-                            $query = mysqli_query($config, "INSERT INTO tbl_metdum_kbl(id_meter,no_dummy,lokasi_posko,nama_cc,stand,tgl_kbl,nama,id_user,unit)
-                                                   VALUES('$id_meter','$no_dummy','$lokasi_posko','$nama_cc','$stand','$tgl_kbl','$nama','$id_user','$unit')");
+                            $query = mysqli_query($config, "INSERT INTO tbl_metdum_kbl(id_meter,no_dummy,lokasi_posko,nama_cc,stand,tgl_kembali,nama,id_user,unit)
+                                                   VALUES('$id_meter','$no_dummy','$lokasi_posko','$nama_cc','$stand','$tgl_kembali','$nama','$id_user','$unit')");
 
                             $query_kembali = mysqli_query($config, "UPDATE tbl_metdum_pakai SET kembali='sudah' WHERE id_meter='$id_meter'");
 
-                            $query_tgl_aktivasi = mysqli_query($config, "UPDATE tbl_metdum_stok SET tgl_kbl='$tgl_kbl', status='ready', no_meter_rusak='' WHERE no_dummy='$no_dummy'");
+                            $query_tgl_aktivasi = mysqli_query($config, "UPDATE tbl_metdum_stok SET tgl_kembali='$tgl_kembali', status='ready', no_meter_rusak='', posko='$lokasi_posko' WHERE no_dummy='$no_dummy'");
 
                             if ($query == true) {
                                 $_SESSION['succAdd'] = 'SUKSES! Data berhasil ditambahkan';
@@ -157,7 +157,7 @@ if (empty($_SESSION['admin'])) {
                         </div>
                         <div class="input-field col s6 tooltipped" data-position="top" data-tooltip="Isi dengan angka">
                             <i class="material-icons prefix md-prefix">looks_two</i>
-                            <input id="stand" type="number" class="validate" name="stand" required>
+                            <input id="stand" type="text" class="validate" name="stand" required>
                             <?php
                             if (isset($_SESSION['stand'])) {
                                 $stand = $_SESSION['stand'];
